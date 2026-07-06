@@ -1,11 +1,38 @@
-import { ArrowLeft, ArrowRight, Bot, Boxes, BrainCircuit, Code2, DatabaseZap, ExternalLink, GitBranch, GraduationCap, Layers3, LockKeyhole, MapPinned, MousePointer2, PanelsTopLeft, Rocket, ShieldCheck, Sparkles, Trophy, WandSparkles } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Award,
+  BadgeCheck,
+  BookOpen,
+  Bot,
+  BrainCircuit,
+  Code2,
+  Cpu,
+  DatabaseZap,
+  Download,
+  ExternalLink,
+  FileText,
+  Gamepad2,
+  GitBranch,
+  GraduationCap,
+  HeartHandshake,
+  Mail,
+  MapPinned,
+  MousePointer2,
+  Network,
+  PanelsTopLeft,
+  Rocket,
+  Send,
+  Sparkles,
+  Trophy,
+} from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { ReactNode, WheelEvent } from 'react';
+import type { MouseEvent as ReactMouseEvent, ReactNode, WheelEvent } from 'react';
 
 type Project = {
   id: string;
   title: string;
-  status: 'Public repo' | 'Private project' | 'Private company project' | 'Private business project';
+  status: 'Public repo' | 'Private project' | 'Private company' | 'Private business';
   category: string;
   impact: string;
   stack: string[];
@@ -13,13 +40,58 @@ type Project = {
   tag: string;
 };
 
-type SkillGroup = {
+type TimelineItem = {
   title: string;
+  subtitle: string;
+  detail: string;
   icon: ReactNode;
-  items: string[];
 };
 
-const slides = ['Start', 'About', 'Projects', 'Toolbox', 'Proof', 'Connect'];
+type LogoItem = {
+  name: string;
+  slug: string;
+  color: string;
+};
+
+type LogoGroup = {
+  title: string;
+  icon: ReactNode;
+  items: LogoItem[];
+};
+
+type GraphNode = {
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  group: 'ai' | 'web' | 'data' | 'product';
+};
+
+const slides = ['Start', 'About', 'Projects', 'Toolbox', 'Connect'];
+const email = 'ynguyenhk@gmail.com';
+const linkedIn = 'https://www.linkedin.com/in/thanh-y-nguyen-803a6726a/';
+const github = 'https://github.com/healerHK';
+
+const graphNodes: GraphNode[] = [
+  { id: 'ai', label: 'AI', x: 18, y: 28, group: 'ai' },
+  { id: 'rag', label: 'RAG', x: 36, y: 18, group: 'ai' },
+  { id: 'agents', label: 'Agents', x: 54, y: 30, group: 'ai' },
+  { id: 'researchai', label: 'ResearchAI', x: 74, y: 20, group: 'product' },
+  { id: 'web', label: 'Web Apps', x: 26, y: 55, group: 'web' },
+  { id: 'django', label: 'Django', x: 47, y: 58, group: 'web' },
+  { id: 'react', label: 'React', x: 68, y: 53, group: 'web' },
+  { id: 'data', label: 'Data', x: 16, y: 78, group: 'data' },
+  { id: 'postgis', label: 'PostGIS', x: 39, y: 82, group: 'data' },
+  { id: 'iot', label: 'IoT', x: 63, y: 76, group: 'product' },
+  { id: 'cattle', label: 'Cota Flow', x: 82, y: 70, group: 'product' },
+];
+
+const staticEdges = [
+  ['ai', 'rag'], ['rag', 'agents'], ['agents', 'researchai'],
+  ['web', 'django'], ['django', 'react'], ['react', 'researchai'],
+  ['data', 'postgis'], ['postgis', 'cattle'], ['iot', 'cattle'],
+  ['ai', 'web'], ['web', 'data'], ['agents', 'iot'],
+];
 
 const projects: Project[] = [
   {
@@ -27,8 +99,8 @@ const projects: Project[] = [
     title: 'ResearchAI',
     status: 'Public repo',
     category: 'Evidence-centered human-AI research environment',
-    impact: 'A Chrome Extension + FastAPI research copilot for citation-grounded writing, paper retrieval, semantic search and Obsidian research-brain export.',
-    stack: ['FastAPI', 'React', 'TypeScript', 'ChromaDB', 'RAG', 'Obsidian', 'Gemini/OpenAI'],
+    impact: 'Research copilot for citation-grounded writing, paper retrieval, semantic search and Obsidian research-brain export.',
+    stack: ['FastAPI', 'React', 'TypeScript', 'ChromaDB', 'RAG'],
     href: 'https://github.com/healerHK/ResearchAI',
     tag: '/assets/project-tags/researchai.svg',
   },
@@ -37,8 +109,8 @@ const projects: Project[] = [
     title: 'EventApp',
     status: 'Public repo',
     category: 'Event management web app',
-    impact: 'A compact Laravel app showing authentication, roles, event CRUD, public discovery, booking workflows, category filtering and feature tests.',
-    stack: ['Laravel', 'PHP', 'Blade', 'Vite', 'Tailwind', 'SQLite', 'PHPUnit'],
+    impact: 'Laravel web app with authentication, roles, event CRUD, public browsing, bookings, filtering and feature tests.',
+    stack: ['Laravel', 'PHP', 'Blade', 'Vite', 'Tailwind'],
     href: 'https://github.com/healerHK/EventApp',
     tag: '/assets/project-tags/eventapp.svg',
   },
@@ -47,8 +119,8 @@ const projects: Project[] = [
     title: 'Face Detect IoT',
     status: 'Public repo',
     category: 'Smart-home camera experiment',
-    impact: 'A practical computer-vision experiment for camera-based face detection and Raspberry Pi 5 / IoT-style home automation workflows.',
-    stack: ['Python', 'OpenCV', 'face_recognition', 'pyttsx3', 'IoT', 'Raspberry Pi'],
+    impact: 'Computer-vision experiment for face detection and Raspberry Pi / IoT-style home automation workflows.',
+    stack: ['Python', 'OpenCV', 'face_recognition', 'IoT'],
     href: 'https://github.com/healerHK/Face_detect',
     tag: '/assets/project-tags/face-detect.svg',
   },
@@ -57,42 +129,119 @@ const projects: Project[] = [
     title: 'Teaching Agent Sim',
     status: 'Private project',
     category: 'Generative-agent research prototype',
-    impact: 'Simulates teacher/student agents to evaluate teaching methods before real-world classroom trials, including engagement and learning outcomes.',
-    stack: ['Python', 'Generative agents', 'Education AI', 'Simulation', 'Stats'],
+    impact: 'Virtual teacher/student agents for exploring teaching methods, engagement, retention and classroom scenarios.',
+    stack: ['Python', 'Generative agents', 'Education AI', 'Simulation'],
     tag: '/assets/project-tags/teaching-sim.svg',
   },
   {
     id: 'coppercoreai',
     title: 'CopperCoreAI',
-    status: 'Private company project',
+    status: 'Private company',
     category: 'Geospatial AI / full-stack industry work',
-    impact: 'Professional spatial-data system experience across Django/PostGIS, geospatial workflows, ML-assisted analysis and data-heavy engineering.',
-    stack: ['Django', 'PostGIS', 'GeoPandas', 'Rasterio', 'Celery', 'TensorFlow'],
+    impact: 'Spatial-data system experience across Django/PostGIS, geospatial workflows, ML-assisted analysis and production-style engineering.',
+    stack: ['Django', 'PostGIS', 'GeoPandas', 'Rasterio', 'Celery'],
     tag: '/assets/project-tags/coppercoreai.svg',
   },
   {
     id: 'cow-system',
     title: 'Cattle Farm System',
-    status: 'Private business project',
+    status: 'Private business',
     category: 'Small cattle-farm operations platform',
-    impact: 'A real business operations platform replacing spreadsheet-heavy workflows for inventory, cattle lots, finance, reporting and customer cota settlement.',
-    stack: ['DRF', 'PostgreSQL', 'React', 'TypeScript', 'Docker', 'ReportLab'],
+    impact: 'Business workflow platform for inventory, cattle lots, finance, reports and customer cota settlement.',
+    stack: ['DRF', 'PostgreSQL', 'React', 'TypeScript', 'Docker'],
     tag: '/assets/project-tags/cow-system.svg',
   },
 ];
 
-const skillGroups: SkillGroup[] = [
-  { title: 'AI engineering', icon: <BrainCircuit />, items: ['LLMs', 'RAG', 'Agentic AI', 'Prompt Engineering', 'Vector DBs', 'Knowledge Graphs'] },
-  { title: 'Full-stack', icon: <PanelsTopLeft />, items: ['FastAPI', 'Django', 'Laravel', 'React', 'TypeScript', 'Tailwind CSS'] },
-  { title: 'Data systems', icon: <DatabaseZap />, items: ['PostgreSQL', 'PostGIS', 'MySQL', 'ChromaDB', 'Redis', 'Celery'] },
-  { title: 'Research tools', icon: <GraduationCap />, items: ['Literature Review', 'Citation Management', 'Obsidian', 'PyMuPDF', 'Google AI Studio'] },
+const aboutItems: TimelineItem[] = [
+  {
+    title: 'Bachelor of Computer Science (Honours)',
+    subtitle: 'Griffith University · Mar 2026 – Present',
+    detail: 'Research interests: LLMs, Agentic AI, RAG, knowledge graphs and AI-assisted research environments.',
+    icon: <GraduationCap />,
+  },
+  {
+    title: 'Bachelor of Computer Science',
+    subtitle: 'Griffith University · Jul 2023 – Dec 2025 · GPA 6/7',
+    detail: 'Strong foundation across algorithms, software engineering, AI systems and full-stack application development.',
+    icon: <BookOpen />,
+  },
+  {
+    title: 'Griffith Award for Academic Excellence',
+    subtitle: 'Bachelor of Computer Science · 2024 & 2025',
+    detail: 'Academic recognition across consecutive years while building applied AI and software projects.',
+    icon: <Award />,
+  },
+  {
+    title: 'Hackathons & pitching',
+    subtitle: 'ABN Hackathon 2025 · NextGen AI Startup Hackathon · Griffith 3MT/Pitching',
+    detail: 'Comfortable turning rough ideas into demos, product stories and team-based prototypes under time pressure.',
+    icon: <Trophy />,
+  },
+  {
+    title: 'Volunteer & community mindset',
+    subtitle: 'Team projects, university activities and practical support roles',
+    detail: 'I enjoy helping people understand technical ideas and contributing where software can make work easier.',
+    icon: <HeartHandshake />,
+  },
+  {
+    title: 'Outside the editor',
+    subtitle: 'F1, creative coding, AI experiments, research reading and tech exploration',
+    detail: 'A mix of speed, systems thinking and curiosity — the same energy I bring into building software.',
+    icon: <Gamepad2 />,
+  },
 ];
 
-const publicLinks = [
-  { label: 'GitHub', href: 'https://github.com/healerHK', icon: <GitBranch /> },
-  { label: 'ResearchAI', href: 'https://github.com/healerHK/ResearchAI', icon: <BrainCircuit /> },
-  { label: 'EventApp', href: 'https://github.com/healerHK/EventApp', icon: <PanelsTopLeft /> },
-  { label: 'Face Detect', href: 'https://github.com/healerHK/Face_detect', icon: <Bot /> },
+const logoGroups: LogoGroup[] = [
+  {
+    title: 'Programming languages',
+    icon: <Code2 />,
+    items: [
+      { name: 'Python', slug: 'python', color: '3776AB' },
+      { name: 'TypeScript', slug: 'typescript', color: '3178C6' },
+      { name: 'JavaScript', slug: 'javascript', color: 'F7DF1E' },
+      { name: 'PHP', slug: 'php', color: '777BB4' },
+      { name: 'HTML5', slug: 'html5', color: 'E34F26' },
+      { name: 'CSS3', slug: 'css3', color: '1572B6' },
+    ],
+  },
+  {
+    title: 'AI / ML',
+    icon: <BrainCircuit />,
+    items: [
+      { name: 'OpenAI', slug: 'openai', color: 'FFFFFF' },
+      { name: 'Gemini', slug: 'googlegemini', color: '8E75B2' },
+      { name: 'TensorFlow', slug: 'tensorflow', color: 'FF6F00' },
+      { name: 'scikit-learn', slug: 'scikitlearn', color: 'F7931E' },
+      { name: 'Obsidian', slug: 'obsidian', color: '7C3AED' },
+    ],
+  },
+  {
+    title: 'Frameworks',
+    icon: <PanelsTopLeft />,
+    items: [
+      { name: 'React', slug: 'react', color: '61DAFB' },
+      { name: 'FastAPI', slug: 'fastapi', color: '009688' },
+      { name: 'Django', slug: 'django', color: '44B78B' },
+      { name: 'Laravel', slug: 'laravel', color: 'FF2D20' },
+      { name: 'Tailwind CSS', slug: 'tailwindcss', color: '38BDF8' },
+      { name: 'Vite', slug: 'vite', color: '646CFF' },
+    ],
+  },
+  {
+    title: 'Data, DevOps & tools',
+    icon: <DatabaseZap />,
+    items: [
+      { name: 'PostgreSQL', slug: 'postgresql', color: '4169E1' },
+      { name: 'MySQL', slug: 'mysql', color: '4479A1' },
+      { name: 'Docker', slug: 'docker', color: '2496ED' },
+      { name: 'Git', slug: 'git', color: 'F05032' },
+      { name: 'GitHub', slug: 'github', color: 'FFFFFF' },
+      { name: 'Redis', slug: 'redis', color: 'DC382D' },
+      { name: 'Postman', slug: 'postman', color: 'FF6C37' },
+      { name: 'VS Code', slug: 'visualstudiocode', color: '007ACC' },
+    ],
+  },
 ];
 
 function useHorizontalTour() {
@@ -115,9 +264,13 @@ function useHorizontalTour() {
       setActive(Math.max(0, Math.min(slides.length - 1, idx)));
     };
 
+    const syncOnResize = () => goTo(active);
     rail.addEventListener('scroll', syncActive, { passive: true });
-    window.addEventListener('resize', () => goTo(active));
-    return () => rail.removeEventListener('scroll', syncActive);
+    window.addEventListener('resize', syncOnResize);
+    return () => {
+      rail.removeEventListener('scroll', syncActive);
+      window.removeEventListener('resize', syncOnResize);
+    };
   }, [active]);
 
   useEffect(() => {
@@ -144,9 +297,82 @@ function useHorizontalTour() {
   return { railRef, active, goTo, onWheel };
 }
 
-function ProjectCard({ project, featured = false }: { project: Project; featured?: boolean }) {
+function PixelGraphStage() {
+  const [cursor, setCursor] = useState({ x: 56, y: 48 });
+
+  const activeNodes = useMemo(() => {
+    return graphNodes
+      .map((node) => ({ node, distance: Math.hypot(node.x - cursor.x, node.y - cursor.y) }))
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 5)
+      .map((entry) => entry.node);
+  }, [cursor]);
+
+  const activeIds = new Set(activeNodes.map((node) => node.id));
+
+  const onMove = (event: ReactMouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setCursor({
+      x: ((event.clientX - rect.left) / rect.width) * 100,
+      y: ((event.clientY - rect.top) / rect.height) * 100,
+    });
+  };
+
   return (
-    <article className={`project-card ${featured ? 'featured' : ''}`}>
+    <div className="graph-stage edge-card" onMouseMove={onMove}>
+      <div className="graph-chrome">
+        <span /><span /><span />
+        <strong>living knowledge graph</strong>
+      </div>
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="graph-svg" aria-label="Interactive linking graph">
+        <defs>
+          <filter id="pixelGlow">
+            <feGaussianBlur stdDeviation="1.2" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {staticEdges.map(([a, b]) => {
+          const from = graphNodes.find((node) => node.id === a)!;
+          const to = graphNodes.find((node) => node.id === b)!;
+          const active = activeIds.has(a) || activeIds.has(b);
+          return <line key={`${a}-${b}`} x1={from.x} y1={from.y} x2={to.x} y2={to.y} className={active ? 'edge active' : 'edge'} />;
+        })}
+
+        {activeNodes.map((node, index) => (
+          <line key={`cursor-${node.id}`} x1={cursor.x} y1={cursor.y} x2={node.x} y2={node.y} className={`cursor-edge depth-${index}`} />
+        ))}
+
+        <g className="cursor-node" filter="url(#pixelGlow)">
+          <rect x={cursor.x - 2.2} y={cursor.y - 2.2} width="4.4" height="4.4" />
+          <line x1={cursor.x - 7} y1={cursor.y} x2={cursor.x + 7} y2={cursor.y} />
+          <line x1={cursor.x} y1={cursor.y - 7} x2={cursor.x} y2={cursor.y + 7} />
+        </g>
+
+        {graphNodes.map((node) => (
+          <g key={node.id} className={`graph-node ${node.group} ${activeIds.has(node.id) ? 'active' : ''}`}>
+            <rect x={node.x - 3.2} y={node.y - 3.2} width="6.4" height="6.4" rx="0.8" />
+          </g>
+        ))}
+      </svg>
+      <div className="graph-labels">
+        {graphNodes.map((node) => (
+          <span key={node.id} className={`graph-label ${activeIds.has(node.id) ? 'active' : ''}`} style={{ left: `${node.x}%`, top: `${node.y}%` }}>
+            {node.label}
+          </span>
+        ))}
+      </div>
+      <div className="graph-note"><MousePointer2 size={15} /> Hover anywhere — the graph grows links around your cursor.</div>
+    </div>
+  );
+}
+
+function ProjectCard({ project }: { project: Project }) {
+  return (
+    <article className="project-card compact-project">
       <div className="project-tag-shell">
         <img src={project.tag} alt={`${project.title} pixel project tag`} />
       </div>
@@ -162,20 +388,43 @@ function ProjectCard({ project, featured = false }: { project: Project; featured
         </div>
         {project.href ? (
           <a className="text-link" href={project.href} target="_blank" rel="noreferrer">
-            View repository <ExternalLink size={16} />
+            View repo <ExternalLink size={15} />
           </a>
         ) : (
-          <span className="text-link muted"><LockKeyhole size={16} /> Case-study summary only</span>
+          <span className="text-link muted">Case-study summary</span>
         )}
       </div>
     </article>
   );
 }
 
+function LogoChip({ item }: { item: LogoItem }) {
+  const [iconBroken, setIconBroken] = useState(false);
+  const initials = item.name
+    .split(/\s|-/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('');
+
+  return (
+    <span className="logo-chip">
+      {iconBroken ? (
+        <span className="logo-fallback" aria-hidden="true">{initials}</span>
+      ) : (
+        <img
+          src={`https://cdn.simpleicons.org/${item.slug}/${item.color}`}
+          alt={`${item.name} logo`}
+          onError={() => setIconBroken(true)}
+        />
+      )}
+      {item.name}
+    </span>
+  );
+}
+
 export function App() {
   const { railRef, active, goTo, onWheel } = useHorizontalTour();
-  const featuredProjects = useMemo(() => projects.slice(0, 3), []);
-  const privateProjects = useMemo(() => projects.slice(3), []);
 
   return (
     <main className="portfolio-shell" onWheel={onWheel}>
@@ -184,8 +433,8 @@ export function App() {
 
       <header className="topbar">
         <button className="brand" onClick={() => goTo(0)} aria-label="Go to hero slide">
-          <span className="brand-mark">HK</span>
-          <span>healerHK</span>
+          <span className="brand-mark">TY</span>
+          <span>Thanh Y Nguyen</span>
         </button>
         <nav aria-label="Portfolio slides">
           {slides.map((slide, index) => (
@@ -201,113 +450,123 @@ export function App() {
       </div>
 
       <div className="slide-rail" ref={railRef}>
-        <section className="slide hero-slide" aria-label="Hero">
+        <section className="slide hero-slide" aria-label="Start">
           <div className="hero-copy">
-            <span className="eyebrow"><Sparkles size={16} /> AI Engineering · Full-Stack · Intelligent Systems</span>
-            <h1>Turning ambitious ideas into practical software.</h1>
+            <span className="eyebrow"><Sparkles size={16} /> Thanh Y Nguyen · HealerHK</span>
+            <h1>AI engineer in the making, building useful systems from connected ideas.</h1>
             <p>
-              A Gen Z developer building researcher-in-the-loop AI, full-stack products, smart IoT experiments and real business workflow systems.
+              Honours Computer Science student at Griffith University, focused on AI engineering, full-stack products, knowledge graphs and practical software that helps people work better.
             </p>
             <div className="hero-actions">
               <button className="primary-action" onClick={() => goTo(2)}>Explore projects <ArrowRight size={18} /></button>
-              <a className="secondary-action" href="https://github.com/healerHK" target="_blank" rel="noreferrer">GitHub profile <GitBranch size={18} /></a>
+              <a className="secondary-action" href="/cv/Thanh-Y-Nguyen-CV-2026.pdf" download>Download CV <Download size={18} /></a>
             </div>
-            <div className="tour-hint"><MousePointer2 size={16} /> Scroll, swipe, or use arrow keys — this portfolio moves sideways.</div>
+            <div className="tour-hint"><MousePointer2 size={16} /> Move your mouse through the graph — links appear around your path.</div>
           </div>
-          <div className="hero-stage edge-card">
-            <div className="browser-chrome"><span /><span /><span /><strong>horizontal portfolio tour</strong></div>
-            <img src="/assets/pixel-ai-lab-animated.gif" alt="Animated pixel F1 coding banner" />
-            <div className="floating-metric left"><Trophy /> 6 portfolio stories</div>
-            <div className="floating-metric right"><Rocket /> Edge-style motion</div>
-          </div>
+          <PixelGraphStage />
         </section>
 
         <section className="slide about-slide" aria-label="About">
-          <div className="large-panel">
-            <span className="eyebrow"><WandSparkles size={16} /> About me</span>
-            <h2>Builder mindset, research-first discipline.</h2>
+          <div className="about-intro large-panel">
+            <span className="eyebrow"><BadgeCheck size={16} /> About</span>
+            <h2>Education, awards, hackathons and interests.</h2>
             <p className="lead">
-              I'm a dev from the Gen Z generation who enjoys turning ambitious ideas into practical software. My work spans AI engineering, full-stack development, and intelligent systems, with a strong interest in open-source software and trustworthy AI.
+              I like building at the intersection of AI, product thinking and real-world workflows — from academic research tools to business platforms and IoT experiments.
             </p>
-            <blockquote>
-              “We are what we repeatedly do. Excellence, then, is not an act but a habit.”
-              <small>Often attributed to Aristotle</small>
-            </blockquote>
+            <div className="identity-card">
+              <strong>Thanh Y Nguyen</strong>
+              <span>Nickname: HealerHK</span>
+              <span>Robertson, QLD · Open to internship, research assistant, AI engineering and full-stack roles</span>
+            </div>
           </div>
-          <div className="side-grid">
-            <div className="mini-card"><BrainCircuit /><strong>Researcher-in-the-loop AI</strong><span>Evidence-first systems, RAG, citation verification and Obsidian workflows.</span></div>
-            <div className="mini-card"><Code2 /><strong>Full-stack delivery</strong><span>FastAPI, Django, Laravel, React, TypeScript and product-focused UX.</span></div>
-            <div className="mini-card"><ShieldCheck /><strong>Privacy-aware portfolio</strong><span>Private/client work shown as architecture and business value, not leaked source.</span></div>
-          </div>
-        </section>
-
-        <section className="slide projects-slide" aria-label="Projects">
-          <div className="section-header">
-            <span className="eyebrow"><Layers3 size={16} /> Featured public work</span>
-            <h2>Projects that show range — AI, web apps and IoT.</h2>
-            <p>Public repos are clickable. Private work is summarized at product/architecture level only.</p>
-          </div>
-          <div className="project-strip">
-            {featuredProjects.map((project, index) => <ProjectCard key={project.id} project={project} featured={index === 0} />)}
-          </div>
-        </section>
-
-        <section className="slide toolbox-slide" aria-label="Toolbox">
-          <div className="section-header compact">
-            <span className="eyebrow"><Boxes size={16} /> Technical toolbox</span>
-            <h2>Modern stack, practical output.</h2>
-            <p>Kept focused: the skills that repeatedly appear across the strongest projects.</p>
-          </div>
-          <div className="skill-grid">
-            {skillGroups.map((group) => (
-              <article className="skill-card" key={group.title}>
-                <div className="skill-icon">{group.icon}</div>
-                <h3>{group.title}</h3>
-                <div className="skill-pills">
-                  {group.items.map((item) => <span key={item}>{item}</span>)}
+          <div className="about-grid">
+            {aboutItems.map((item) => (
+              <article className="about-card" key={item.title}>
+                <div className="about-icon">{item.icon}</div>
+                <div>
+                  <h3>{item.title}</h3>
+                  <strong>{item.subtitle}</strong>
+                  <p>{item.detail}</p>
                 </div>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="slide proof-slide" aria-label="Private work and contribution proof">
-          <div className="section-header compact">
-            <span className="eyebrow"><LockKeyhole size={16} /> Case studies + proof</span>
-            <h2>Private work still shows engineering strength.</h2>
-            <p>Source stays private; product impact and architecture are safe to discuss.</p>
+        <section className="slide projects-slide" aria-label="Projects">
+          <div className="section-header compact-header">
+            <span className="eyebrow"><Rocket size={16} /> Projects</span>
+            <h2>Selected work across AI, web apps, geospatial systems and IoT.</h2>
+            <p>Cards are compact so everything stays visible in the slide instead of falling out of the page.</p>
           </div>
-          <div className="proof-layout">
-            <div className="private-stack">
-              {privateProjects.map((project) => <ProjectCard key={project.id} project={project} />)}
-            </div>
-            <div className="stats-panel edge-card">
-              <div className="browser-chrome"><span /><span /><span /><strong>github signals</strong></div>
-              <img src="https://streak-stats.demolab.com?user=healerHK&theme=radical&hide_border=true&background=0D1117&ring=F43F5E&fire=F97316&currStreakLabel=F472B6&sideLabels=22D3EE&dates=94A3B8" alt="GitHub streak stats" />
-              <img src="https://github-profile-summary-cards.vercel.app/api/cards/stats?username=healerHK&theme=radical" alt="GitHub summary stats" />
-            </div>
+          <div className="projects-grid">
+            {projects.map((project) => <ProjectCard key={project.id} project={project} />)}
+          </div>
+        </section>
+
+        <section className="slide toolbox-slide" aria-label="Toolbox">
+          <div className="section-header compact-header">
+            <span className="eyebrow"><Cpu size={16} /> Toolbox</span>
+            <h2>Tools and languages I actually build with.</h2>
+            <p>Research-tool category removed. This section focuses on programming languages, AI/ML, frameworks, databases and dev tools.</p>
+          </div>
+          <div className="logo-toolbox-grid">
+            {logoGroups.map((group) => (
+              <article className="logo-toolbox-card" key={group.title}>
+                <div className="toolbox-title">
+                  <span className="skill-icon">{group.icon}</span>
+                  <h3>{group.title}</h3>
+                </div>
+                <div className="logo-chip-grid">
+                  {group.items.map((item) => <LogoChip key={item.name} item={item} />)}
+                </div>
+              </article>
+            ))}
+            <article className="logo-toolbox-card special-card">
+              <div className="toolbox-title">
+                <span className="skill-icon"><Network /></span>
+                <h3>Concepts</h3>
+              </div>
+              <div className="concept-list">
+                <span>RAG</span><span>Agentic AI</span><span>Knowledge Graphs</span><span>REST APIs</span><span>Geospatial AI</span><span>IoT workflows</span>
+              </div>
+            </article>
           </div>
         </section>
 
         <section className="slide connect-slide" aria-label="Connect">
-          <div className="connect-panel">
-            <span className="eyebrow"><MapPinned size={16} /> QLD, Australia · open-source minded</span>
-            <h2>Want the deeper version?</h2>
-            <p>
-              Click into a repo, ask about a private case study, or use this portfolio as a recruiter-facing snapshot of AI engineering and full-stack product work.
-            </p>
-            <div className="link-grid">
-              {publicLinks.map((link) => (
-                <a href={link.href} target="_blank" rel="noreferrer" key={link.label}>
-                  {link.icon}
-                  <span>{link.label}</span>
-                  <ExternalLink size={16} />
-                </a>
-              ))}
+          <div className="connect-panel redesigned-contact">
+            <span className="eyebrow"><Mail size={16} /> Contact</span>
+            <h2>Let’s talk about internships, AI projects or full-stack work.</h2>
+            <div className="contact-layout">
+              <form className="contact-form" action={`https://formsubmit.co/${email}`} method="POST" target="_blank">
+                <input type="hidden" name="_subject" value="Portfolio message for Thanh Y Nguyen" />
+                <input type="hidden" name="_template" value="table" />
+                <input type="hidden" name="_captcha" value="false" />
+                <label>
+                  Your name
+                  <input name="name" placeholder="Recruiter / company name" required />
+                </label>
+                <label>
+                  Your email
+                  <input name="email" type="email" placeholder="name@company.com" required />
+                </label>
+                <label>
+                  Message
+                  <textarea name="message" placeholder="Tell me about the role, project or opportunity..." rows={5} required />
+                </label>
+                <button className="primary-action" type="submit">Send message <Send size={18} /></button>
+              </form>
+
+              <div className="contact-links">
+                <a href={`mailto:${email}`}><Mail /> <span>{email}</span></a>
+                <a href={linkedIn} target="_blank" rel="noreferrer"><ExternalLink /> <span>LinkedIn</span></a>
+                <a href={github} target="_blank" rel="noreferrer"><GitBranch /> <span>GitHub / HealerHK</span></a>
+                <a href="/cv/Thanh-Y-Nguyen-CV-2026.pdf" download><FileText /> <span>Download CV PDF</span></a>
+                <a href="/cv/Thanh-Y-Nguyen-CV-2026.docx" download><Download /> <span>Download CV DOCX</span></a>
+              </div>
             </div>
-            <div className="final-note">
-              <ShieldCheck /> Confidential source code, credentials, datasets and private business details stay private.
-            </div>
+
           </div>
         </section>
       </div>
