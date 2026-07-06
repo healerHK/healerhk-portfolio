@@ -435,7 +435,15 @@ function PixelGraphStage() {
 
 function ProjectCard({ project, onOpen }: { project: Project; onOpen: (project: Project) => void }) {
   return (
-    <button type="button" className="project-card project-card-button" onClick={() => onOpen(project)}>
+    <button type="button" className="project-card project-card-button pixel-project-card" onClick={() => onOpen(project)}>
+      <span className="pixel-card-bar" aria-hidden="true" />
+      <span className="pixel-corner-dots" aria-hidden="true"><i /><i /><i /></span>
+      <span className="pixel-shapes" aria-hidden="true">
+        <i className="pixel-shape square" />
+        <i className="pixel-shape triangle" />
+        <i className="pixel-shape diamond" />
+        <i className="pixel-shape circle" />
+      </span>
       <span className={project.visibility === 'Public repo' ? 'repo-pill public' : 'repo-pill private'}>{project.visibility}</span>
       <h3>{project.title}</h3>
       <p>{project.short}</p>
