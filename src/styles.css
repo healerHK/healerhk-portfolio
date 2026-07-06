@@ -630,8 +630,7 @@ h2 {
 .theme-day .contact-form input,
 .theme-day .contact-form textarea,
 .theme-day .github-meta-grid div,
-.theme-day .modal-chip-row span,
-.theme-day .concept-list span {
+.theme-day .keyword-chip {
   border-color: rgba(124, 45, 18, 0.16);
   background: rgba(255, 247, 214, 0.55);
 }
@@ -659,6 +658,35 @@ h2 {
 .theme-day .github-meta-grid strong,
 .theme-day .github-meta-grid span {
   color: #7c2d12;
+}
+
+.theme-day .stack-highlight-section {
+  border-color: rgba(234, 88, 12, 0.28);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(250, 204, 21, 0.18), transparent 34%),
+    rgba(255, 237, 213, 0.48);
+}
+
+.theme-day .stack-highlight-section strong {
+  color: #c2410c;
+}
+
+.theme-day .keyword-chip {
+  color: #431407;
+  border-color: rgba(234, 88, 12, 0.26);
+  background:
+    linear-gradient(135deg, rgba(250, 204, 21, 0.18), rgba(251, 146, 60, 0.12)),
+    rgba(255, 247, 214, 0.62);
+  box-shadow: 0 0 18px rgba(234, 88, 12, 0.10);
+}
+
+.theme-day .keyword-chip.has-logo {
+  border-color: rgba(234, 88, 12, 0.38);
+}
+
+.theme-day .keyword-fallback {
+  color: #431407;
+  background: linear-gradient(135deg, #facc15, #fb923c);
 }
 
 
@@ -734,6 +762,175 @@ h2 {
   transform: translateY(-3px);
   border-color: rgba(167, 139, 250, 0.45);
   background: rgba(167, 139, 250, 0.12);
+}
+
+.about-intro,
+.about-card,
+.identity-card,
+.logo-toolbox-card,
+.connect-panel,
+.contact-links a {
+  --pixel: #22d3ee;
+  --pixel-2: #a78bfa;
+  border: 2px solid var(--pixel);
+  border-radius: 0;
+  image-rendering: pixelated;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--pixel) 22%, transparent) 0 0) top left / 100% 4px no-repeat,
+    repeating-linear-gradient(0deg, rgba(148, 163, 184, 0.04) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, rgba(148, 163, 184, 0.035) 0 1px, transparent 1px 14px),
+    linear-gradient(145deg, rgba(8, 13, 34, 0.92), rgba(2, 6, 23, 0.76));
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    7px 7px 0 rgba(0, 0, 0, 0.28),
+    0 18px 54px color-mix(in srgb, var(--pixel) 18%, transparent);
+}
+
+.about-intro::before,
+.about-card::before,
+.identity-card::before,
+.logo-toolbox-card::before,
+.connect-panel::before,
+.contact-links a::before,
+.about-intro::after,
+.about-card::after,
+.identity-card::after,
+.logo-toolbox-card::after,
+.connect-panel::after,
+.contact-links a::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.about-intro::before,
+.about-card::before,
+.identity-card::before,
+.logo-toolbox-card::before,
+.connect-panel::before,
+.contact-links a::before {
+  top: 9px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  background: var(--pixel);
+  box-shadow:
+    -13px 0 0 var(--pixel-2),
+    -26px 0 0 rgba(226, 232, 240, 0.68),
+    0 13px 0 color-mix(in srgb, var(--pixel) 45%, transparent);
+}
+
+.about-intro::after,
+.about-card::after,
+.identity-card::after,
+.logo-toolbox-card::after,
+.connect-panel::after,
+.contact-links a::after {
+  right: 13px;
+  bottom: 13px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--pixel);
+  box-shadow: -6px -6px 0 -2px var(--pixel-2);
+  transform: rotate(45deg);
+}
+
+.about-intro > *,
+.about-card > *,
+.identity-card > *,
+.logo-toolbox-card > *,
+.connect-panel > *,
+.contact-links a > * {
+  position: relative;
+  z-index: 1;
+}
+
+.about-card:nth-child(1) { --pixel: #22d3ee; --pixel-2: #a78bfa; }
+.about-card:nth-child(2) { --pixel: #34d399; --pixel-2: #22d3ee; }
+.about-card:nth-child(3) { --pixel: #facc15; --pixel-2: #fb923c; }
+.about-card:nth-child(4) { --pixel: #f472b6; --pixel-2: #fb7185; }
+.about-card:nth-child(5) { --pixel: #a78bfa; --pixel-2: #60a5fa; }
+.about-card:nth-child(6) { --pixel: #fb923c; --pixel-2: #ef4444; }
+
+.logo-toolbox-card:nth-child(1) { --pixel: #3776ab; --pixel-2: #3178c6; }
+.logo-toolbox-card:nth-child(2) { --pixel: #8b5cf6; --pixel-2: #22d3ee; }
+.logo-toolbox-card:nth-child(3) { --pixel: #61dafb; --pixel-2: #ff2d20; }
+.logo-toolbox-card:nth-child(4) { --pixel: #2496ed; --pixel-2: #f05032; }
+
+.contact-links a:nth-child(1) { --pixel: #22d3ee; --pixel-2: #a78bfa; }
+.contact-links a:nth-child(2) { --pixel: #60a5fa; --pixel-2: #22d3ee; }
+.contact-links a:nth-child(3) { --pixel: #e2e8f0; --pixel-2: #a78bfa; }
+.contact-links a:nth-child(4) { --pixel: #34d399; --pixel-2: #22d3ee; }
+.contact-links a:nth-child(5) { --pixel: #facc15; --pixel-2: #fb923c; }
+
+.about-intro { --pixel: #f472b6; --pixel-2: #22d3ee; }
+.identity-card { --pixel: #a78bfa; --pixel-2: #f472b6; }
+.connect-panel { --pixel: #fb923c; --pixel-2: #22d3ee; }
+
+.about-intro:hover,
+.about-card:hover,
+.identity-card:hover,
+.logo-toolbox-card:hover,
+.connect-panel:hover,
+.contact-links a:hover {
+  transform: translate(-2px, -5px);
+  border-color: var(--pixel-2);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--pixel) 30%, transparent) 0 0) top left / 100% 5px no-repeat,
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--pixel) 8%, transparent) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--pixel-2) 7%, transparent) 0 1px, transparent 1px 14px),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(8, 13, 34, 0.88));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--pixel) 24%, transparent) inset,
+    9px 9px 0 rgba(0, 0, 0, 0.34),
+    0 24px 76px color-mix(in srgb, var(--pixel) 24%, transparent);
+}
+
+.theme-day .about-intro,
+.theme-day .about-card,
+.theme-day .identity-card,
+.theme-day .logo-toolbox-card,
+.theme-day .connect-panel,
+.theme-day .contact-links a {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--pixel) 18%, transparent) 0 0) top left / 100% 4px no-repeat,
+    repeating-linear-gradient(0deg, rgba(124, 45, 18, 0.055) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, rgba(124, 45, 18, 0.045) 0 1px, transparent 1px 14px),
+    linear-gradient(145deg, rgba(255, 247, 214, 0.92), rgba(254, 215, 170, 0.72));
+  box-shadow:
+    0 0 0 1px rgba(124, 45, 18, 0.08) inset,
+    7px 7px 0 rgba(124, 45, 18, 0.18),
+    0 18px 50px color-mix(in srgb, var(--pixel) 18%, transparent);
+}
+
+.theme-day .about-intro:hover,
+.theme-day .about-card:hover,
+.theme-day .identity-card:hover,
+.theme-day .logo-toolbox-card:hover,
+.theme-day .connect-panel:hover,
+.theme-day .contact-links a:hover {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--pixel) 28%, transparent) 0 0) top left / 100% 5px no-repeat,
+    repeating-linear-gradient(0deg, rgba(124, 45, 18, 0.07) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, rgba(124, 45, 18, 0.055) 0 1px, transparent 1px 14px),
+    linear-gradient(145deg, rgba(255, 247, 214, 0.98), rgba(254, 215, 170, 0.84));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--pixel) 22%, transparent) inset,
+    9px 9px 0 rgba(124, 45, 18, 0.22),
+    0 22px 60px color-mix(in srgb, var(--pixel) 22%, transparent);
+}
+
+.theme-day .about-intro::before,
+.theme-day .about-card::before,
+.theme-day .identity-card::before,
+.theme-day .logo-toolbox-card::before,
+.theme-day .connect-panel::before,
+.theme-day .contact-links a::before {
+  box-shadow:
+    -13px 0 0 var(--pixel-2),
+    -26px 0 0 rgba(124, 45, 18, 0.52),
+    0 13px 0 color-mix(in srgb, var(--pixel) 45%, transparent);
 }
 
 .graph-stage {
@@ -1259,7 +1456,7 @@ h2 {
 
 .logo-toolbox-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -1412,6 +1609,80 @@ h2 {
 
 .contact-links svg { color: #22d3ee; flex: 0 0 auto; }
 
+.about-intro,
+.about-card,
+.identity-card,
+.logo-toolbox-card,
+.connect-panel,
+.contact-links a {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid var(--pixel);
+  border-radius: 0;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--pixel) 22%, transparent) 0 0) top left / 100% 4px no-repeat,
+    repeating-linear-gradient(0deg, rgba(148, 163, 184, 0.04) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, rgba(148, 163, 184, 0.035) 0 1px, transparent 1px 14px),
+    linear-gradient(145deg, rgba(8, 13, 34, 0.92), rgba(2, 6, 23, 0.76));
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    7px 7px 0 rgba(0, 0, 0, 0.28),
+    0 18px 54px color-mix(in srgb, var(--pixel) 18%, transparent);
+}
+
+.about-intro:hover,
+.about-card:hover,
+.identity-card:hover,
+.logo-toolbox-card:hover,
+.connect-panel:hover,
+.contact-links a:hover {
+  transform: translate(-2px, -5px);
+  border-color: var(--pixel-2);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--pixel) 30%, transparent) 0 0) top left / 100% 5px no-repeat,
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--pixel) 8%, transparent) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--pixel-2) 7%, transparent) 0 1px, transparent 1px 14px),
+    linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(8, 13, 34, 0.88));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--pixel) 24%, transparent) inset,
+    9px 9px 0 rgba(0, 0, 0, 0.34),
+    0 24px 76px color-mix(in srgb, var(--pixel) 24%, transparent);
+}
+
+.theme-day .about-intro,
+.theme-day .about-card,
+.theme-day .identity-card,
+.theme-day .logo-toolbox-card,
+.theme-day .connect-panel,
+.theme-day .contact-links a {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--pixel) 18%, transparent) 0 0) top left / 100% 4px no-repeat,
+    repeating-linear-gradient(0deg, rgba(124, 45, 18, 0.055) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, rgba(124, 45, 18, 0.045) 0 1px, transparent 1px 14px),
+    linear-gradient(145deg, rgba(255, 247, 214, 0.92), rgba(254, 215, 170, 0.72));
+  box-shadow:
+    0 0 0 1px rgba(124, 45, 18, 0.08) inset,
+    7px 7px 0 rgba(124, 45, 18, 0.18),
+    0 18px 50px color-mix(in srgb, var(--pixel) 18%, transparent);
+}
+
+.theme-day .about-intro:hover,
+.theme-day .about-card:hover,
+.theme-day .identity-card:hover,
+.theme-day .logo-toolbox-card:hover,
+.theme-day .connect-panel:hover,
+.theme-day .contact-links a:hover {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--pixel) 28%, transparent) 0 0) top left / 100% 5px no-repeat,
+    repeating-linear-gradient(0deg, rgba(124, 45, 18, 0.07) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, rgba(124, 45, 18, 0.055) 0 1px, transparent 1px 14px),
+    linear-gradient(145deg, rgba(255, 247, 214, 0.98), rgba(254, 215, 170, 0.84));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--pixel) 22%, transparent) inset,
+    9px 9px 0 rgba(124, 45, 18, 0.22),
+    0 22px 60px color-mix(in srgb, var(--pixel) 22%, transparent);
+}
+
 .form-note {
   display: inline-flex;
   align-items: center;
@@ -1546,14 +1817,65 @@ h2 {
   gap: 8px;
 }
 
-.modal-chip-row span {
+.stack-highlight-section {
+  padding: 14px;
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(34, 211, 238, 0.12), transparent 34%),
+    rgba(15, 23, 42, 0.42);
+}
+
+.stack-highlight-section strong {
+  color: #67e8f9;
+}
+
+.highlighted-keywords {
+  gap: 9px;
+}
+
+.keyword-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
   padding: 7px 10px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid rgba(34, 211, 238, 0.28);
   border-radius: 999px;
   color: #e2e8f0;
-  background: rgba(15, 23, 42, 0.68);
+  background:
+    linear-gradient(135deg, rgba(34, 211, 238, 0.12), rgba(167, 139, 250, 0.10)),
+    rgba(15, 23, 42, 0.72);
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.08);
   font-size: 0.78rem;
-  font-weight: 820;
+  font-weight: 850;
+}
+
+.keyword-chip.has-logo {
+  border-color: rgba(125, 211, 252, 0.42);
+  box-shadow: 0 0 22px rgba(34, 211, 238, 0.12);
+}
+
+.keyword-chip img,
+.keyword-fallback {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.keyword-chip img {
+  object-fit: contain;
+}
+
+.keyword-fallback {
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  color: #020617;
+  background: linear-gradient(135deg, #22d3ee, #a78bfa);
+  font-size: 0.56rem;
+  font-weight: 950;
+  letter-spacing: -0.02em;
 }
 
 .modal-actions {

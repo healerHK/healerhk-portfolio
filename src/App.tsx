@@ -4,7 +4,6 @@ import {
   Award,
   BadgeCheck,
   BookOpen,
-  Bot,
   BrainCircuit,
   Code2,
   Cpu,
@@ -18,7 +17,6 @@ import {
   HeartHandshake,
   Mail,
   Moon,
-  Network,
   PanelsTopLeft,
   Rocket,
   Send,
@@ -308,6 +306,37 @@ const logoGroups: LogoGroup[] = [
   },
 ];
 
+const keywordLogoMap: Record<string, LogoItem> = {
+  python: { name: 'Python', slug: 'python', color: '3776AB' },
+  fastapi: { name: 'FastAPI', slug: 'fastapi', color: '009688' },
+  react: { name: 'React', slug: 'react', color: '61DAFB' },
+  typescript: { name: 'TypeScript', slug: 'typescript', color: '3178C6' },
+  php: { name: 'PHP', slug: 'php', color: '777BB4' },
+  laravel: { name: 'Laravel', slug: 'laravel', color: 'FF2D20' },
+  vite: { name: 'Vite', slug: 'vite', color: '646CFF' },
+  tailwind: { name: 'Tailwind CSS', slug: 'tailwindcss', color: '38BDF8' },
+  tailwindcss: { name: 'Tailwind CSS', slug: 'tailwindcss', color: '38BDF8' },
+  'tailwind-css': { name: 'Tailwind CSS', slug: 'tailwindcss', color: '38BDF8' },
+  django: { name: 'Django', slug: 'django', color: '44B78B' },
+  'django-rest-framework': { name: 'Django', slug: 'django', color: '44B78B' },
+  postgresql: { name: 'PostgreSQL', slug: 'postgresql', color: '4169E1' },
+  postgis: { name: 'PostGIS', slug: 'postgis', color: '336791' },
+  docker: { name: 'Docker', slug: 'docker', color: '2496ED' },
+  opencv: { name: 'OpenCV', slug: 'opencv', color: '5C3EE8' },
+  obsidian: { name: 'Obsidian', slug: 'obsidian', color: '7C3AED' },
+  'chrome-extension': { name: 'Chrome', slug: 'googlechrome', color: '4285F4' },
+  celery: { name: 'Celery', slug: 'celery', color: '37814A' },
+  git: { name: 'Git', slug: 'git', color: 'F05032' },
+  github: { name: 'GitHub', slug: 'github', color: 'FFFFFF' },
+};
+
+const normalizeKeyword = (value: string) => value.toLowerCase().replace(/[\s_]+/g, '-').replace(/[^a-z0-9-]/g, '');
+
+function logoForKeyword(value: string): LogoItem | undefined {
+  const normalized = normalizeKeyword(value);
+  return keywordLogoMap[normalized] ?? keywordLogoMap[normalized.replace(/-/g, '')];
+}
+
 function useHorizontalTour() {
   const railRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -508,11 +537,11 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           </ul>
         </div>
 
-        <div className="modal-section">
+        <div className="modal-section stack-highlight-section">
           <strong>Stack / keywords</strong>
-          <div className="modal-chip-row">
-            {project.stack.map((item) => <span key={item}>{item}</span>)}
-            {project.github?.topics.map((topic) => <span key={topic}>{topic}</span>)}
+          <div className="modal-chip-row highlighted-keywords">
+            {project.stack.map((item) => <KeywordChip key={item} label={item} />)}
+            {project.github?.topics.map((topic) => <KeywordChip key={topic} label={topic} />)}
           </div>
         </div>
       </section>
@@ -536,6 +565,32 @@ function SkyEffects() {
       <span className="bird bird-4" />
       <span className="bird bird-5" />
     </div>
+  );
+}
+
+function KeywordChip({ label }: { label: string }) {
+  const logo = logoForKeyword(label);
+  const [iconBroken, setIconBroken] = useState(false);
+  const initials = label
+    .split(/\s|-|_/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('');
+
+  return (
+    <span className={logo ? 'keyword-chip has-logo' : 'keyword-chip'}>
+      {logo && !iconBroken ? (
+        <img
+          src={`https://cdn.simpleicons.org/${logo.slug}/${logo.color}`}
+          alt={`${logo.name} logo`}
+          onError={() => setIconBroken(true)}
+        />
+      ) : (
+        <span className="keyword-fallback" aria-hidden="true">{initials || '#'}</span>
+      )}
+      <span>{label}</span>
+    </span>
   );
 }
 
@@ -657,7 +712,6 @@ export function App() {
             <div className="section-header compact-header">
               <span className="eyebrow"><Rocket size={16} /> Projects</span>
               <h2>Selected work across AI, web apps, geospatial systems and IoT.</h2>
-              <p>Simple cards show repo visibility. Click any project to open details in the center of the page.</p>
             </div>
             <div className="projects-grid">
               {projects.map((project) => <ProjectCard key={project.id} project={project} onOpen={setSelectedProject} />)}
@@ -670,7 +724,6 @@ export function App() {
             <div className="section-header compact-header">
               <span className="eyebrow"><Cpu size={16} /> Toolbox</span>
               <h2>Tools and languages I actually build with.</h2>
-              <p>Programming languages, AI/ML tools, frameworks, databases and developer tools.</p>
             </div>
             <div className="logo-toolbox-grid">
               {logoGroups.map((group) => (
@@ -684,15 +737,6 @@ export function App() {
                   </div>
                 </article>
               ))}
-              <article className="logo-toolbox-card special-card hover-panel">
-                <div className="toolbox-title">
-                  <span className="skill-icon"><Network /></span>
-                  <h3>Concepts</h3>
-                </div>
-                <div className="concept-list">
-                  <span>RAG</span><span>Agentic AI</span><span>Knowledge Graphs</span><span>REST APIs</span><span>Geospatial AI</span><span>IoT workflows</span>
-                </div>
-              </article>
             </div>
           </div>
         </section>
