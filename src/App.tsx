@@ -17,14 +17,15 @@ import {
   GraduationCap,
   HeartHandshake,
   Mail,
-  MapPinned,
-  MousePointer2,
+  Moon,
   Network,
   PanelsTopLeft,
   Rocket,
   Send,
   Sparkles,
+  Sun,
   Trophy,
+  X,
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { MouseEvent as ReactMouseEvent, ReactNode, WheelEvent } from 'react';
@@ -32,12 +33,21 @@ import type { MouseEvent as ReactMouseEvent, ReactNode, WheelEvent } from 'react
 type Project = {
   id: string;
   title: string;
-  status: 'Public repo' | 'Private project' | 'Private company' | 'Private business';
-  category: string;
-  impact: string;
+  visibility: 'Public repo' | 'Private repo';
+  short: string;
+  detail: string;
+  context: string;
   stack: string[];
+  highlights: string[];
   href?: string;
-  tag: string;
+  github?: {
+    description: string;
+    language: string;
+    stars: number;
+    forks: number;
+    updated: string;
+    topics: string[];
+  };
 };
 
 type TimelineItem = {
@@ -97,59 +107,113 @@ const projects: Project[] = [
   {
     id: 'researchai',
     title: 'ResearchAI',
-    status: 'Public repo',
-    category: 'Evidence-centered human-AI research environment',
-    impact: 'Research copilot for citation-grounded writing, paper retrieval, semantic search and Obsidian research-brain export.',
-    stack: ['FastAPI', 'React', 'TypeScript', 'ChromaDB', 'RAG'],
+    visibility: 'Public repo',
+    short: 'Evidence-centered AI research environment for citation-grounded academic workflows.',
+    detail: 'ResearchAI is a human-in-the-loop research platform for paper retrieval, citation verification, semantic search and Obsidian research-brain export.',
+    context: 'GitHub repository metadata pulled from the public healerHK/ResearchAI repo.',
+    stack: ['Python', 'FastAPI', 'React', 'TypeScript', 'ChromaDB', 'RAG'],
+    highlights: [
+      'Citation-grounded research assistance instead of autonomous paper writing.',
+      'Paper retrieval, semantic search and evidence-first verification workflow.',
+      'Chrome extension + backend + research-brain export architecture.',
+    ],
     href: 'https://github.com/healerHK/ResearchAI',
-    tag: '/assets/project-tags/researchai.svg',
+    github: {
+      description: 'Evidence-centered human-AI research environment for citation-grounded academic writing, paper retrieval, and Obsidian research-brain export.',
+      language: 'Python',
+      stars: 1,
+      forks: 1,
+      updated: '2026-07-05',
+      topics: ['academic-writing', 'chrome-extension', 'citation-recommendation', 'fastapi', 'obsidian', 'rag', 'react', 'research-ai'],
+    },
   },
   {
     id: 'eventapp',
     title: 'EventApp',
-    status: 'Public repo',
-    category: 'Event management web app',
-    impact: 'Laravel web app with authentication, roles, event CRUD, public browsing, bookings, filtering and feature tests.',
-    stack: ['Laravel', 'PHP', 'Blade', 'Vite', 'Tailwind'],
+    visibility: 'Public repo',
+    short: 'Laravel event management app with roles, bookings, categories and feature tests.',
+    detail: 'A portfolio-ready Laravel web application covering event browsing, authentication, role-based flows, bookings, categories, Vite frontend build and automated tests.',
+    context: 'GitHub repository metadata pulled from the public healerHK/EventApp repo.',
+    stack: ['PHP', 'Laravel', 'Blade', 'Vite', 'Tailwind'],
+    highlights: [
+      'Role-aware event management workflow with public browsing and bookings.',
+      'Cleaned repository with portfolio-friendly README and ignored runtime files.',
+      'Feature tests verified before publishing.',
+    ],
     href: 'https://github.com/healerHK/EventApp',
-    tag: '/assets/project-tags/eventapp.svg',
+    github: {
+      description: 'Laravel event management app with roles, bookings, categories, Vite frontend build and feature tests.',
+      language: 'PHP',
+      stars: 0,
+      forks: 0,
+      updated: '2026-07-05',
+      topics: [],
+    },
   },
   {
     id: 'face-detect',
     title: 'Face Detect IoT',
-    status: 'Public repo',
-    category: 'Smart-home camera experiment',
-    impact: 'Computer-vision experiment for face detection and Raspberry Pi / IoT-style home automation workflows.',
+    visibility: 'Public repo',
+    short: 'Camera-based face detection experiment for smart-home and Raspberry Pi style workflows.',
+    detail: 'A Python computer-vision project for camera-based face detection, privacy-hardened for public GitHub with configurable people directory and attendance output paths.',
+    context: 'GitHub repository metadata pulled from the public healerHK/Face_detect repo.',
     stack: ['Python', 'OpenCV', 'face_recognition', 'IoT'],
+    highlights: [
+      'Refactored away from hardcoded local paths into CLI/environment configuration.',
+      'Designed as an IoT-style experiment for smart-home camera workflows.',
+      'Public repo excludes private faces, attendance CSVs and runtime files.',
+    ],
     href: 'https://github.com/healerHK/Face_detect',
-    tag: '/assets/project-tags/face-detect.svg',
+    github: {
+      description: 'Camera-based face detection experiment for smart-home IoT and Raspberry Pi style workflows.',
+      language: 'Python',
+      stars: 0,
+      forks: 0,
+      updated: '2026-07-05',
+      topics: [],
+    },
   },
   {
     id: 'teaching-sim',
     title: 'Teaching Agent Sim',
-    status: 'Private project',
-    category: 'Generative-agent research prototype',
-    impact: 'Virtual teacher/student agents for exploring teaching methods, engagement, retention and classroom scenarios.',
+    visibility: 'Private repo',
+    short: 'Generative-agent education prototype for teacher/student simulation scenarios.',
+    detail: 'A private research prototype exploring virtual teacher and student agents, teaching strategies, engagement patterns, retention and classroom simulation workflows.',
+    context: 'Private project summary. Source code and internal details are not exposed publicly.',
     stack: ['Python', 'Generative agents', 'Education AI', 'Simulation'],
-    tag: '/assets/project-tags/teaching-sim.svg',
+    highlights: [
+      'Models classroom scenarios through interacting teacher/student agents.',
+      'Explores learning engagement and retention from a simulation perspective.',
+      'Useful bridge between AI research ideas and education product concepts.',
+    ],
   },
   {
     id: 'coppercoreai',
     title: 'CopperCoreAI',
-    status: 'Private company',
-    category: 'Geospatial AI / full-stack industry work',
-    impact: 'Spatial-data system experience across Django/PostGIS, geospatial workflows, ML-assisted analysis and production-style engineering.',
+    visibility: 'Private repo',
+    short: 'Confidential geospatial AI and full-stack industry work.',
+    detail: 'A private company project summarized at portfolio level only: geospatial data workflows, Django/PostGIS systems, ML-assisted analysis and production-style engineering responsibilities.',
+    context: 'Private/company project. Public portfolio keeps source code, credentials, datasets and internal implementation details private.',
     stack: ['Django', 'PostGIS', 'GeoPandas', 'Rasterio', 'Celery'],
-    tag: '/assets/project-tags/coppercoreai.svg',
+    highlights: [
+      'Worked with spatial-data engineering patterns and geospatial AI workflows.',
+      'Balanced backend, data and product-facing engineering responsibilities.',
+      'Presented as a high-level case study without leaking company implementation.',
+    ],
   },
   {
     id: 'cow-system',
     title: 'Cattle Farm System',
-    status: 'Private business',
-    category: 'Small cattle-farm operations platform',
-    impact: 'Business workflow platform for inventory, cattle lots, finance, reports and customer cota settlement.',
-    stack: ['DRF', 'PostgreSQL', 'React', 'TypeScript', 'Docker'],
-    tag: '/assets/project-tags/cow-system.svg',
+    visibility: 'Private repo',
+    short: 'Private business operations platform for a small cattle farm in Vietnam.',
+    detail: 'A Django + React business workflow platform for cattle inventory, lots, finance, debt tracking, reports and customer cota settlement.',
+    context: 'Private business repo. The project is described by product value and architecture level, not by private business data.',
+    stack: ['Django REST Framework', 'PostgreSQL', 'React', 'TypeScript', 'Docker'],
+    highlights: [
+      'Connects cattle lots, finance, debt tracking, reports and cota settlement.',
+      'Designed around real cashier/business workflows rather than demo-only screens.',
+      'Private repo because it supports a real family/business operations context.',
+    ],
   },
 ];
 
@@ -338,8 +402,8 @@ function PixelGraphStage() {
         {staticEdges.map(([a, b]) => {
           const from = graphNodes.find((node) => node.id === a)!;
           const to = graphNodes.find((node) => node.id === b)!;
-          const active = activeIds.has(a) || activeIds.has(b);
-          return <line key={`${a}-${b}`} x1={from.x} y1={from.y} x2={to.x} y2={to.y} className={active ? 'edge active' : 'edge'} />;
+          const activeEdge = activeIds.has(a) || activeIds.has(b);
+          return <line key={`${a}-${b}`} x1={from.x} y1={from.y} x2={to.x} y2={to.y} className={activeEdge ? 'edge active' : 'edge'} />;
         })}
 
         {activeNodes.map((node, index) => (
@@ -365,36 +429,105 @@ function PixelGraphStage() {
           </span>
         ))}
       </div>
-      <div className="graph-note"><MousePointer2 size={15} /> Hover anywhere — the graph grows links around your cursor.</div>
     </div>
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project, onOpen }: { project: Project; onOpen: (project: Project) => void }) {
   return (
-    <article className="project-card compact-project">
-      <div className="project-tag-shell">
-        <img src={project.tag} alt={`${project.title} pixel project tag`} />
-      </div>
-      <div className="project-card-copy">
-        <div className="status-row">
-          <span className="status-pill">{project.status}</span>
-          <span className="category">{project.category}</span>
+    <button type="button" className="project-card project-card-button" onClick={() => onOpen(project)}>
+      <span className={project.visibility === 'Public repo' ? 'repo-pill public' : 'repo-pill private'}>{project.visibility}</span>
+      <h3>{project.title}</h3>
+      <p>{project.short}</p>
+      <span className="details-hint">Open details <ArrowRight size={14} /></span>
+    </button>
+  );
+}
+
+function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  return (
+    <div className="modal-backdrop" role="presentation" onClick={onClose} onWheel={(event) => event.stopPropagation()}>
+      <section className="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title" onClick={(event) => event.stopPropagation()}>
+        <button className="modal-close" type="button" onClick={onClose} aria-label="Close project details"><X size={20} /></button>
+        <div className="modal-heading">
+          <span className={project.visibility === 'Public repo' ? 'repo-pill public' : 'repo-pill private'}>{project.visibility}</span>
+          <h2 id="project-modal-title">{project.title}</h2>
+          <p>{project.detail}</p>
         </div>
-        <h3>{project.title}</h3>
-        <p>{project.impact}</p>
-        <div className="stack-row">
-          {project.stack.map((item) => <span key={item}>{item}</span>)}
+
+        <div className="modal-actions">
+          {project.href ? (
+            <a className="primary-action" href={project.href} target="_blank" rel="noreferrer">View repo <ExternalLink size={18} /></a>
+          ) : (
+            <span className="private-note">Private repo — details available as a case-study conversation.</span>
+          )}
+          <button className="secondary-action" type="button" onClick={onClose}>Close</button>
         </div>
-        {project.href ? (
-          <a className="text-link" href={project.href} target="_blank" rel="noreferrer">
-            View repo <ExternalLink size={15} />
-          </a>
-        ) : (
-          <span className="text-link muted">Case-study summary</span>
+
+        <div className="modal-section muted-panel">
+          <strong>Source</strong>
+          <p>{project.context}</p>
+        </div>
+
+        {project.github && (
+          <div className="github-meta-grid" aria-label="GitHub repository information">
+            <div><strong>Language</strong><span>{project.github.language}</span></div>
+            <div><strong>Stars</strong><span>{project.github.stars}</span></div>
+            <div><strong>Forks</strong><span>{project.github.forks}</span></div>
+            <div><strong>Updated</strong><span>{project.github.updated}</span></div>
+          </div>
         )}
-      </div>
-    </article>
+
+        {project.github && (
+          <div className="modal-section">
+            <strong>GitHub description</strong>
+            <p>{project.github.description}</p>
+          </div>
+        )}
+
+        <div className="modal-section">
+          <strong>Highlights</strong>
+          <ul>
+            {project.highlights.map((item) => <li key={item}>{item}</li>)}
+          </ul>
+        </div>
+
+        <div className="modal-section">
+          <strong>Stack / keywords</strong>
+          <div className="modal-chip-row">
+            {project.stack.map((item) => <span key={item}>{item}</span>)}
+            {project.github?.topics.map((topic) => <span key={topic}>{topic}</span>)}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function SkyEffects() {
+  return (
+    <div className="sky-effects" aria-hidden="true">
+      <div className="moon-orb" />
+      <span className="meteor meteor-1" />
+      <span className="meteor meteor-2" />
+      <span className="meteor meteor-3" />
+      <span className="meteor meteor-4" />
+
+      <div className="sun-orb" />
+      <span className="bird bird-1" />
+      <span className="bird bird-2" />
+      <span className="bird bird-3" />
+      <span className="bird bird-4" />
+      <span className="bird bird-5" />
+    </div>
   );
 }
 
@@ -425,11 +558,15 @@ function LogoChip({ item }: { item: LogoItem }) {
 
 export function App() {
   const { railRef, active, goTo, onWheel } = useHorizontalTour();
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [theme, setTheme] = useState<'night' | 'day'>('night');
+  const isDay = theme === 'day';
 
   return (
-    <main className="portfolio-shell" onWheel={onWheel}>
+    <main className={`portfolio-shell theme-${theme}`} onWheel={onWheel}>
       <div className="ambient ambient-one" />
       <div className="ambient ambient-two" />
+      <SkyEffects />
 
       <header className="topbar">
         <button className="brand" onClick={() => goTo(0)} aria-label="Go to hero slide">
@@ -451,122 +588,141 @@ export function App() {
 
       <div className="slide-rail" ref={railRef}>
         <section className="slide hero-slide" aria-label="Start">
-          <div className="hero-copy">
-            <span className="eyebrow"><Sparkles size={16} /> Thanh Y Nguyen · HealerHK</span>
-            <h1>AI engineer in the making, building useful systems from connected ideas.</h1>
-            <p>
-              Honours Computer Science student at Griffith University, focused on AI engineering, full-stack products, knowledge graphs and practical software that helps people work better.
-            </p>
-            <div className="hero-actions">
-              <button className="primary-action" onClick={() => goTo(2)}>Explore projects <ArrowRight size={18} /></button>
-              <a className="secondary-action" href="/cv/Thanh-Y-Nguyen-CV-2026.pdf" download>Download CV <Download size={18} /></a>
+          <div className="slide-content hero-layout">
+            <div className="hero-copy">
+              <span className="eyebrow"><Sparkles size={16} /> Thanh Y Nguyen · HealerHK</span>
+              <h1>AI engineer in the making, building useful systems from connected ideas.</h1>
+              <p>
+                Honours Computer Science student at Griffith University, focused on AI engineering, full-stack products, knowledge graphs and practical software that helps people work better.
+              </p>
+              <div className="hero-actions">
+                <button className="primary-action" onClick={() => goTo(2)}>Explore projects <ArrowRight size={18} /></button>
+                <a className="secondary-action" href="/cv/Thanh-Y-Nguyen-CV-2026.pdf" download>Download CV <Download size={18} /></a>
+                <button
+                  className="theme-switch"
+                  type="button"
+                  onClick={() => setTheme(isDay ? 'night' : 'day')}
+                  aria-label={isDay ? 'Switch to night mode' : 'Switch to sunset mode'}
+                  aria-pressed={isDay}
+                >
+                  <span className="switch-icon moon-icon"><Moon size={15} /></span>
+                  <span className="switch-track"><span className="switch-thumb" /></span>
+                  <span className="switch-icon sun-icon"><Sun size={15} /></span>
+                </button>
+              </div>
             </div>
-            <div className="tour-hint"><MousePointer2 size={16} /> Move your mouse through the graph — links appear around your path.</div>
+            <PixelGraphStage />
           </div>
-          <PixelGraphStage />
         </section>
 
         <section className="slide about-slide" aria-label="About">
-          <div className="about-intro large-panel">
-            <span className="eyebrow"><BadgeCheck size={16} /> About</span>
-            <h2>Education, awards, hackathons and interests.</h2>
-            <p className="lead">
-              I like building at the intersection of AI, product thinking and real-world workflows — from academic research tools to business platforms and IoT experiments.
-            </p>
-            <div className="identity-card">
-              <strong>Thanh Y Nguyen</strong>
-              <span>Nickname: HealerHK</span>
-              <span>Robertson, QLD · Open to internship, research assistant, AI engineering and full-stack roles</span>
+          <div className="slide-content about-layout">
+            <div className="about-intro large-panel hover-panel">
+              <span className="eyebrow"><BadgeCheck size={16} /> About</span>
+              <h2>Education, awards, hackathons and interests.</h2>
+              <p className="lead">
+                I like building at the intersection of AI, product thinking and real-world workflows — from academic research tools to business platforms and IoT experiments.
+              </p>
+              <div className="identity-card hover-panel-soft">
+                <strong>Thanh Y Nguyen</strong>
+                <span>Nickname: HealerHK</span>
+                <span>Robertson, QLD · Open to internship, research assistant, AI engineering and full-stack roles</span>
+              </div>
             </div>
-          </div>
-          <div className="about-grid">
-            {aboutItems.map((item) => (
-              <article className="about-card" key={item.title}>
-                <div className="about-icon">{item.icon}</div>
-                <div>
-                  <h3>{item.title}</h3>
-                  <strong>{item.subtitle}</strong>
-                  <p>{item.detail}</p>
-                </div>
-              </article>
-            ))}
+            <div className="about-grid">
+              {aboutItems.map((item) => (
+                <article className="about-card hover-panel" key={item.title}>
+                  <div className="about-icon">{item.icon}</div>
+                  <div>
+                    <h3>{item.title}</h3>
+                    <strong>{item.subtitle}</strong>
+                    <p>{item.detail}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
         <section className="slide projects-slide" aria-label="Projects">
-          <div className="section-header compact-header">
-            <span className="eyebrow"><Rocket size={16} /> Projects</span>
-            <h2>Selected work across AI, web apps, geospatial systems and IoT.</h2>
-            <p>Cards are compact so everything stays visible in the slide instead of falling out of the page.</p>
-          </div>
-          <div className="projects-grid">
-            {projects.map((project) => <ProjectCard key={project.id} project={project} />)}
+          <div className="slide-content projects-layout">
+            <div className="section-header compact-header">
+              <span className="eyebrow"><Rocket size={16} /> Projects</span>
+              <h2>Selected work across AI, web apps, geospatial systems and IoT.</h2>
+              <p>Simple cards show repo visibility. Click any project to open details in the center of the page.</p>
+            </div>
+            <div className="projects-grid">
+              {projects.map((project) => <ProjectCard key={project.id} project={project} onOpen={setSelectedProject} />)}
+            </div>
           </div>
         </section>
 
         <section className="slide toolbox-slide" aria-label="Toolbox">
-          <div className="section-header compact-header">
-            <span className="eyebrow"><Cpu size={16} /> Toolbox</span>
-            <h2>Tools and languages I actually build with.</h2>
-            <p>Research-tool category removed. This section focuses on programming languages, AI/ML, frameworks, databases and dev tools.</p>
-          </div>
-          <div className="logo-toolbox-grid">
-            {logoGroups.map((group) => (
-              <article className="logo-toolbox-card" key={group.title}>
+          <div className="slide-content toolbox-layout">
+            <div className="section-header compact-header">
+              <span className="eyebrow"><Cpu size={16} /> Toolbox</span>
+              <h2>Tools and languages I actually build with.</h2>
+              <p>Programming languages, AI/ML tools, frameworks, databases and developer tools.</p>
+            </div>
+            <div className="logo-toolbox-grid">
+              {logoGroups.map((group) => (
+                <article className="logo-toolbox-card hover-panel" key={group.title}>
+                  <div className="toolbox-title">
+                    <span className="skill-icon">{group.icon}</span>
+                    <h3>{group.title}</h3>
+                  </div>
+                  <div className="logo-chip-grid">
+                    {group.items.map((item) => <LogoChip key={item.name} item={item} />)}
+                  </div>
+                </article>
+              ))}
+              <article className="logo-toolbox-card special-card hover-panel">
                 <div className="toolbox-title">
-                  <span className="skill-icon">{group.icon}</span>
-                  <h3>{group.title}</h3>
+                  <span className="skill-icon"><Network /></span>
+                  <h3>Concepts</h3>
                 </div>
-                <div className="logo-chip-grid">
-                  {group.items.map((item) => <LogoChip key={item.name} item={item} />)}
+                <div className="concept-list">
+                  <span>RAG</span><span>Agentic AI</span><span>Knowledge Graphs</span><span>REST APIs</span><span>Geospatial AI</span><span>IoT workflows</span>
                 </div>
               </article>
-            ))}
-            <article className="logo-toolbox-card special-card">
-              <div className="toolbox-title">
-                <span className="skill-icon"><Network /></span>
-                <h3>Concepts</h3>
-              </div>
-              <div className="concept-list">
-                <span>RAG</span><span>Agentic AI</span><span>Knowledge Graphs</span><span>REST APIs</span><span>Geospatial AI</span><span>IoT workflows</span>
-              </div>
-            </article>
+            </div>
           </div>
         </section>
 
         <section className="slide connect-slide" aria-label="Connect">
-          <div className="connect-panel redesigned-contact">
-            <span className="eyebrow"><Mail size={16} /> Contact</span>
-            <h2>Let’s talk about internships, AI projects or full-stack work.</h2>
-            <div className="contact-layout">
-              <form className="contact-form" action={`https://formsubmit.co/${email}`} method="POST" target="_blank">
-                <input type="hidden" name="_subject" value="Portfolio message for Thanh Y Nguyen" />
-                <input type="hidden" name="_template" value="table" />
-                <input type="hidden" name="_captcha" value="false" />
-                <label>
-                  Your name
-                  <input name="name" placeholder="Recruiter / company name" required />
-                </label>
-                <label>
-                  Your email
-                  <input name="email" type="email" placeholder="name@company.com" required />
-                </label>
-                <label>
-                  Message
-                  <textarea name="message" placeholder="Tell me about the role, project or opportunity..." rows={5} required />
-                </label>
-                <button className="primary-action" type="submit">Send message <Send size={18} /></button>
-              </form>
+          <div className="slide-content connect-layout">
+            <div className="connect-panel redesigned-contact hover-panel">
+              <span className="eyebrow"><Mail size={16} /> Contact</span>
+              <h2>Let’s talk about internships, AI projects or full-stack work.</h2>
+              <div className="contact-layout">
+                <form className="contact-form" action={`https://formsubmit.co/${email}`} method="POST" target="_blank">
+                  <input type="hidden" name="_subject" value="Portfolio message for Thanh Y Nguyen" />
+                  <input type="hidden" name="_template" value="table" />
+                  <input type="hidden" name="_captcha" value="false" />
+                  <label>
+                    Your name
+                    <input name="name" placeholder="Recruiter / company name" required />
+                  </label>
+                  <label>
+                    Your email
+                    <input name="email" type="email" placeholder="name@company.com" required />
+                  </label>
+                  <label>
+                    Message
+                    <textarea name="message" placeholder="Tell me about the role, project or opportunity..." rows={5} required />
+                  </label>
+                  <button className="primary-action" type="submit">Send message <Send size={18} /></button>
+                </form>
 
-              <div className="contact-links">
-                <a href={`mailto:${email}`}><Mail /> <span>{email}</span></a>
-                <a href={linkedIn} target="_blank" rel="noreferrer"><ExternalLink /> <span>LinkedIn</span></a>
-                <a href={github} target="_blank" rel="noreferrer"><GitBranch /> <span>GitHub / HealerHK</span></a>
-                <a href="/cv/Thanh-Y-Nguyen-CV-2026.pdf" download><FileText /> <span>Download CV PDF</span></a>
-                <a href="/cv/Thanh-Y-Nguyen-CV-2026.docx" download><Download /> <span>Download CV DOCX</span></a>
+                <div className="contact-links">
+                  <a href={`mailto:${email}`}><Mail /> <span>{email}</span></a>
+                  <a href={linkedIn} target="_blank" rel="noreferrer"><ExternalLink /> <span>LinkedIn</span></a>
+                  <a href={github} target="_blank" rel="noreferrer"><GitBranch /> <span>GitHub / HealerHK</span></a>
+                  <a href="/cv/Thanh-Y-Nguyen-CV-2026.pdf" download><FileText /> <span>Download CV PDF</span></a>
+                  <a href="/cv/Thanh-Y-Nguyen-CV-2026.docx" download><Download /> <span>Download CV DOCX</span></a>
+                </div>
               </div>
             </div>
-
           </div>
         </section>
       </div>
@@ -576,6 +732,8 @@ export function App() {
         <span>{active + 1} / {slides.length}</span>
         <button onClick={() => goTo(active + 1)} disabled={active === slides.length - 1} aria-label="Next slide"><ArrowRight /></button>
       </footer>
+
+      {selectedProject && <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
     </main>
   );
 }
