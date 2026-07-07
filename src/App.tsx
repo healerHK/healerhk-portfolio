@@ -81,7 +81,6 @@ const linkedIn = 'https://www.linkedin.com/in/thanh-y-nguyen-803a6726a/';
 const github = 'https://github.com/healerHK';
 const assetPath = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
 const cvPdfPath = assetPath('/cv/Thanh-Y-Nguyen-CV-2026.pdf');
-const cvDocxPath = assetPath('/cv/Thanh-Y-Nguyen-CV-2026.docx');
 
 const graphNodes: GraphNode[] = [
   { id: 'ai', label: 'AI', x: 18, y: 28, group: 'ai' },
@@ -244,9 +243,9 @@ const aboutItems: TimelineItem[] = [
     icon: <Trophy />,
   },
   {
-    title: 'Volunteer & community mindset',
-    subtitle: 'Team projects, university activities and practical support roles',
-    detail: 'I enjoy helping people understand technical ideas and contributing where software can make work easier.',
+    title: 'Student Volunteer Chair, ADC 2024',
+    subtitle: 'Gold Coast, Australia & Tokyo, Japan',
+    detail: 'Supported volunteer coordination, session logistics and attendee experience for an international database conference.',
     icon: <HeartHandshake />,
   },
   {
@@ -692,7 +691,7 @@ export function App() {
               <div className="identity-card hover-panel-soft">
                 <strong>Thanh Y Nguyen</strong>
                 <span>Nickname: HealerHK</span>
-                <span>Robertson, QLD · Open to internship, research assistant, AI engineering and full-stack roles</span>
+                <span>Robertson, QLD · Open to AI engineering, full-stack, research assistant and IT support roles</span>
               </div>
             </div>
             <div className="about-grid">
@@ -748,7 +747,7 @@ export function App() {
           <div className="slide-content connect-layout">
             <div className="connect-panel redesigned-contact hover-panel">
               <span className="eyebrow"><Mail size={16} /> Contact</span>
-              <h2>Let’s talk about internships, AI projects or full-stack work.</h2>
+              <h2>Let’s talk about career opportunities, AI projects or full-stack work.</h2>
               <div className="contact-layout">
                 <form className="contact-form" action={`https://formsubmit.co/${email}`} method="POST" target="_blank">
                   <input type="hidden" name="_subject" value="Portfolio message for Thanh Y Nguyen" />
@@ -774,7 +773,6 @@ export function App() {
                   <a href={linkedIn} target="_blank" rel="noreferrer"><ExternalLink /> <span>LinkedIn</span></a>
                   <a href={github} target="_blank" rel="noreferrer"><GitBranch /> <span>GitHub / HealerHK</span></a>
                   <a href={cvPdfPath} download><FileText /> <span>Download CV PDF</span></a>
-                  <a href={cvDocxPath} download><Download /> <span>Download CV DOCX</span></a>
                 </div>
               </div>
             </div>
