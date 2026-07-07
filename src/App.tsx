@@ -79,6 +79,9 @@ const slides = ['Start', 'About', 'Projects', 'Toolbox', 'Connect'];
 const email = 'ynguyenhk@gmail.com';
 const linkedIn = 'https://www.linkedin.com/in/thanh-y-nguyen-803a6726a/';
 const github = 'https://github.com/healerHK';
+const assetPath = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+const cvPdfPath = assetPath('/cv/Thanh-Y-Nguyen-CV-2026.pdf');
+const cvDocxPath = assetPath('/cv/Thanh-Y-Nguyen-CV-2026.docx');
 
 const graphNodes: GraphNode[] = [
   { id: 'ai', label: 'AI', x: 18, y: 28, group: 'ai' },
@@ -660,7 +663,7 @@ export function App() {
               </p>
               <div className="hero-actions">
                 <button className="primary-action" onClick={() => goTo(2)}>Explore projects <ArrowRight size={18} /></button>
-                <a className="secondary-action" href="/cv/Thanh-Y-Nguyen-CV-2026.pdf" download>Download CV <Download size={18} /></a>
+                <a className="secondary-action" href={cvPdfPath} download>Download CV <Download size={18} /></a>
                 <button
                   className="theme-switch"
                   type="button"
@@ -770,8 +773,8 @@ export function App() {
                   <a href={`mailto:${email}`}><Mail /> <span>{email}</span></a>
                   <a href={linkedIn} target="_blank" rel="noreferrer"><ExternalLink /> <span>LinkedIn</span></a>
                   <a href={github} target="_blank" rel="noreferrer"><GitBranch /> <span>GitHub / HealerHK</span></a>
-                  <a href="/cv/Thanh-Y-Nguyen-CV-2026.pdf" download><FileText /> <span>Download CV PDF</span></a>
-                  <a href="/cv/Thanh-Y-Nguyen-CV-2026.docx" download><Download /> <span>Download CV DOCX</span></a>
+                  <a href={cvPdfPath} download><FileText /> <span>Download CV PDF</span></a>
+                  <a href={cvDocxPath} download><Download /> <span>Download CV DOCX</span></a>
                 </div>
               </div>
             </div>
