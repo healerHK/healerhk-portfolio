@@ -6,3 +6,8 @@ dist/
 .env.*
 .DS_Store
 Thumbs.db
+
+# Generated local CV variants/backups; only public/cv/Thanh-Y-Nguyen-CV-2026.{pdf,docx} is published.
+public/cv/*.backup-before-ats-rewrite-*.*
+public/cv/*ATS-References-2026.*
+scripts/create_ats_cv_docx.py
