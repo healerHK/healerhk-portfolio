@@ -238,7 +238,7 @@ const aboutItems: TimelineItem[] = [
   },
   {
     title: 'Hackathons & pitching',
-    subtitle: 'ABN Hackathon 2025 · NextGen AI Startup Hackathon · Griffith 3MT/Pitching',
+    subtitle: 'ANZ Cyber Crime Hackathon 2025 · NextGen AI Startup Hackathon · Griffith 3MT/Pitching',
     detail: 'Comfortable turning rough ideas into demos, product stories and team-based prototypes under time pressure.',
     icon: <Trophy />,
   },
